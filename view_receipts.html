@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Workshop - Receipts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function filterReceipts() {
+            const selectedCar = document.getElementById('carFilter').value;
+            const receipts = document.querySelectorAll('.receipt-item');
+            receipts.forEach(receipt => {
+                const carName = receipt.getAttribute('data-car-name');
+                if (selectedCar === 'all' || carName === selectedCar) {
+                    receipt.style.display = 'block';
+                } else {
+                    receipt.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">Car Workshop</a>
+            <div>
+                <a href="{{ url_for('logout') }}" class="hover:underline text-lg">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Car Image -->
+    <section class="bg-blue-50 py-16">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-center">
+            <div class="text-center md:text-left md:w-1/2">
+                <h1 class="text-4xl font-bold text-gray-800">Welcome to Car Workshop</h1>
+                <p class="mt-4 text-lg text-gray-600">Your trusted partner for car maintenance and repairs.</p>
+            </div>
+            <div class="mt-8 md:mt-0 md:w-1/2">
+                <img src="https://www.polestar.com/dato-assets/11286/1727429768-img_6404.jpeg?q=60&dpr=1&w=1248" alt="Car Image" class="rounded-lg shadow-lg">
+            </div>
+        </div>
+    </section>
+
+    <!-- Receipt List Section -->
+    <section class="container mx-auto text-center py-16">
+        <h1 class="text-4xl font-bold text-gray-800">Uploaded Receipts</h1>
+
+        <!-- Car Filter Dropdown -->
+        <div class="mt-8">
+            <label for="carFilter" class="text-lg font-semibold text-gray-700">Filter by Car:</label>
+            <select id="carFilter" onchange="filterReceipts()" class="ml-2 p-2 rounded-lg border border-gray-300">
+                <option value="all">All Cars</option>
+                <!-- Populate dropdown with unique car names -->
+                {% for car_name in unique_cars %}
+                    <option value="{{ car_name }}">{{ car_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if receipts %}
+            <div class="mt-8 space-y-4">
+                {% for receipt in receipts %}
+                    <div class="receipt-item bg-white p-6 rounded-lg shadow-lg" data-car-name="{{ receipt.car_name }}">
+                        <h2 class="text-2xl font-semibold text-gray-800">Receipt for {{ receipt.car_name }}</h2>
+                        <p class="text-lg text-gray-600 mt-2">Username: {{ receipt.username }}</p>
+                        <p class="text-lg text-gray-600">Model: {{ receipt.car_name }}</p>
+                        <p class="text-lg text-gray-600">Engine Oil Cost: ₹{{ receipt.engine_oil_cost }}</p>
+                        <p class="text-lg text-gray-600">Oil Filter Cost: ₹{{ receipt.oil_filter_cost }}</p>
+                        <p class="text-lg text-gray-600">Air Filter Cost: ₹{{ receipt.air_filter_cost }}</p>
+                        <p class="text-lg text-gray-600">Date: {{ receipt.update_date }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-lg text-gray-600 mt-4">No receipts uploaded yet.</p>
+        {% endif %}
+        
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Car Workshop. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

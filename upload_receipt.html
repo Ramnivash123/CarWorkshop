@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">Car Workshop</a>
+            <div>
+                <a href="{{ url_for('logout') }}" class="hover:underline text-lg">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Car Image -->
+    <section class="bg-blue-50 py-16">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-center">
+            <div class="text-center md:text-left md:w-1/2">
+                <h1 class="text-4xl font-bold text-gray-800">Welcome to Car Workshop</h1>
+                <p class="mt-4 text-lg text-gray-600">Your trusted partner for car maintenance and repairs.</p>
+            </div>
+            <div class="mt-8 md:mt-0 md:w-1/2">
+                <img src="https://assets6.domestika.org/course-images/000/051/426/51426-big.jpeg" alt="Car Image" class="rounded-lg shadow-lg">
+            </div>
+        </div>
+    </section>
+
+    <!-- Receipt Section -->
+    <section class="container mx-auto text-center py-16 bg-gray-100 rounded-lg shadow-lg max-w-3xl">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6">Upload Your Receipt</h2>
+        
+        <form action="{{ url_for('upload_receipt') }}" method="POST" class="bg-white p-8 rounded-lg shadow-md">
+            
+            <!-- Car Name -->
+            <div class="mb-6 text-left">
+                <label for="car_name" class="block text-lg font-medium text-gray-700 mb-2">Car Name:</label>
+                <input type="text" name="car_name" class="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+            </div>
+
+            <!-- Engine Oil Cost -->
+            <div class="mb-6 text-left">
+                <label for="engine_oil_cost" class="block text-lg font-medium text-gray-700 mb-2">Engine Oil Cost:</label>
+                <input type="number" name="engine_oil_cost" class="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+            </div>
+
+            <!-- Oil Filter Cost -->
+            <div class="mb-6 text-left">
+                <label for="oil_filter_cost" class="block text-lg font-medium text-gray-700 mb-2">Oil Filter Cost:</label>
+                <input type="number" name="oil_filter_cost" class="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+            </div>
+
+            <!-- Air Filter Cost -->
+            <div class="mb-6 text-left">
+                <label for="air_filter_cost" class="block text-lg font-medium text-gray-700 mb-2">Air Filter Cost:</label>
+                <input type="number" name="air_filter_cost" class="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+            </div>
+
+            <!-- update month -->
+            <div class="mb-6 text-left">
+                <label for="update_date" class="block text-lg font-medium text-gray-700 mb-2">Update Date:</label>
+                <input type="date" name="update_date" class="border border-gray-300 p-3 rounded-lg w-full focus:ring-2 focus:ring-blue-400 focus:outline-none" required>
+            </div>
+        
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-700 transition duration-300">
+                Submit Receipt
+            </button>
+        </form>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Car Workshop. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

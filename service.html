@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Car Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl font-bold flex items-center">
+                <i class="fas fa-wrench mr-2"></i>
+                Car Workshop
+            </a>
+            <div class="flex items-center space-x-6">
+                <div class="relative group">
+                    <button class="flex items-center space-x-1">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                    </button>
+                </div>
+                
+                <a href="{{url_for('logout')}}" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="relative flex flex-col justify-center text-center h-80 px-6 bg-cover bg-center bg-no-repeat" 
+             style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxLlUo2xHGL0bqeqARpfKe1g7uOtOdLJBbog&s');">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative z-10">
+            <h1 class="text-5xl font-bold text-white mb-4">Welcome to Your Dashboard</h1>
+            <p class="text-xl text-gray-200">Manage your vehicle maintenance and services</p>
+            {% if session['username'] %}
+                <div class="mt-4 inline-block bg-white bg-opacity-20 px-6 py-2 rounded-lg backdrop-blur-sm">
+                    <span class="text-white text-lg">Welcome back, {{ session['username'] }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+   
+
+    <!-- Main Actions -->
+    <section class="container mx-auto py-12 px-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Manage Your Services</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Add a Service -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition duration-300">
+                        <i class="fas fa-plus text-blue-600 text-xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Add a Service</h3>
+                    <p class="text-gray-600 mb-6">Upload a receipt to add a new service to your records.</p>
+                    <a href="{{ url_for('upload_receipt') }}" 
+                       class="inline-flex items-center text-blue-600 hover:text-blue-700">
+                        <span>Add New Service</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Previous Services -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition duration-300">
+                        <i class="fas fa-history text-green-600 text-xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Service History</h3>
+                    <p class="text-gray-600 mb-6">View your complete service history and past records.</p>
+                    <a href="{{ url_for('view_receipts') }}" 
+                       class="inline-flex items-center text-green-600 hover:text-green-700">
+                        <span>View History</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Service Analysis -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition duration-300">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-600 transition duration-300">
+                        <i class="fas fa-chart-line text-purple-600 text-xl group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Service Analysis</h3>
+                    <p class="text-gray-600 mb-6">Get insights into your service patterns and expenses.</p>
+                    <a href="{{ url_for('analysis') }}" 
+                       class="inline-flex items-center text-purple-600 hover:text-purple-700">
+                        <span>View Analysis</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Upcoming Maintenance -->
+    <section class="container mx-auto py-8 px-6">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Upcoming Maintenance</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 mr-3"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Oil Change Due</h3>
+                            <p class="text-sm text-gray-600">Due in 500 miles or 2 weeks</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Brake Inspection</h3>
+                            <p class="text-sm text-gray-600">Overdue by 2 weeks</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="border border-blue-200 bg-blue-50 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-800">Tire Rotation</h3>
+                            <p class="text-sm text-gray-600">Due in 1 month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; 2025 Car Workshop. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-gray-300 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-300 transition">Terms of Service</a>
+                    <a href="#" class="hover:text-gray-300 transition">Contact Support</a>
+                </div>
+            </div>
+        </div>
+        </footer>

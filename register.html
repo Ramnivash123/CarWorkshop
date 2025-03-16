@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Car Workshop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-xl font-bold">Car Workshop</a>
+            <div class="space-x-4">
+                <a href="/" class="hover:underline">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Signup Section -->
+    <section class="container mx-auto text-center py-20">
+        <h1 class="text-4xl font-bold text-gray-800">Create an Account</h1>
+        <p class="text-lg text-gray-600 mt-4">Join us for the best car maintenance services.</p>
+        <form class="mt-6 space-y-4 max-w-md mx-auto bg-white p-6 rounded-lg shadow" action="{{url_for('register')}}" method="post">
+            <input type="text" placeholder="Full Name" class="w-full p-3 border rounded-lg" id="username" name="username" required>
+            <input type="email" placeholder="Email Address" class="w-full p-3 border rounded-lg" id="email" name="email" required>
+            <input type="password" placeholder="Password" class="w-full p-3 border rounded-lg" id="password" name="password" required>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 w-full">Sign Up</button>
+        </form>
+        <p class="mt-4 text-gray-600">Already have an account? <a href="{{url_for('register2')}}" class="text-blue-600 hover:underline">Sign in</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white text-center p-4 mt-10">
+        <p>&copy; 2025 Car Workshop. All rights reserved.</p>
+    </footer>
+</body>
+</html>
