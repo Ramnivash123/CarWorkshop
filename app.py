@@ -329,6 +329,90 @@ def send_alert():
     except Exception as e:
         logging.error(f"Error sending email: {e}")  # Log the error
         return jsonify({'success': False, 'message': str(e)})
+    
+from flask import Flask, render_template, request
+import pytesseract
+from PIL import Image
+from datetime import datetime
+import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+
+pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'  # Windows
+load_dotenv()
+
+def send_email(to_email, subject, body):
+    from_email = os.getenv('GMAIL_EMAIL')
+    password = os.getenv('GMAIL_PASSWORD')
+
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(from_email, password)
+    text = msg.as_string()
+    server.sendmail(from_email, to_email, text)
+    server.quit()
+
+def extract_expiry_date(image_path):
+    image = Image.open(image_path)
+    text = pytesseract.image_to_string(image)
+    print("Extracted Text:\n", text)  # Debugging: Print extracted text
+    lines = text.split('\n')
+    for line in lines:
+        if "Expiration Date:" in line:
+            # Extract the date part and remove any extra characters
+            date_str = line.split("Expiration Date:")[1].strip()
+            # Remove any non-date characters (e.g., extra numbers or text)
+            date_str = ''.join(filter(lambda x: x.isdigit() or x == '/', date_str))
+            return date_str
+    return None
+    
+
+from datetime import datetime
+
+def parse_date(date_str):
+    # List of possible date formats
+    formats = ['%d/%m/%Y', '%m/%d/%Y', '%Y/%m/%d', '%d-%m-%Y', '%m-%d-%Y']
+    
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+    raise ValueError(f"Unable to parse date: {date_str}")
+
+@app.route('/insurance', methods=['GET', 'POST'])
+def insurance():
+    if request.method == 'POST':
+        file = request.files['file']
+        image_path = "uploaded_image.png"
+        file.save(image_path)
+
+        expiry_date_str = extract_expiry_date(image_path)
+        if expiry_date_str:
+            try:
+                # Parse the date using the correct format
+                expiry_date = parse_date(expiry_date_str)
+                if (expiry_date - datetime.now()).days <= 30:
+                    send_email('recipient@example.com', 'Insurance Expiry Alert', 
+                               f'Your insurance is expiring on {expiry_date_str}.')
+                    return "Expiry date is approaching. Alert email sent."
+                else:
+                    return "Expiry date is not within 30 days."
+            except ValueError as e:
+                return f"Error parsing date: {e}. Extracted date string: {expiry_date_str}"
+        else:
+            return "Expiry date not found in the image."
+    return render_template('insurance.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
